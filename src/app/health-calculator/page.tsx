@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 
 const parseFormattedNumber = (str: string): number | null => {
   if (!str) return null;
@@ -195,21 +196,26 @@ export default function HealthCalculator() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
-          血量計算機
-        </h1>
+        <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            血量計算機
+            </h1>
+            <Link href="/" className="text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 px-3 py-1.5">
+                返回首頁
+            </Link>
+        </div>
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label
               htmlFor="maxHealth"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              最高血量（開火後，就填寫開火後的血量）
+              總血量（開聖火後，就填寫開聖火後的血量）
             </label>
             <input
               type="text"
               id="maxHealth"
-              placeholder="例如: 5,000"
+              placeholder="5,000"
               value={maxHealthInput}
               onChange={handleNumericInputChange(setMaxHealthInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -225,7 +231,7 @@ export default function HealthCalculator() {
             <input
               type="text"
               id="maxDamage"
-              placeholder="例如: 1,950"
+              placeholder="1,950"
               value={maxDamageInput}
               onChange={handleNumericInputChange(setMaxDamageInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -236,12 +242,12 @@ export default function HealthCalculator() {
               htmlFor="healAmount"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              補品每次補血量
+              每次補血量
             </label>
             <input
               type="text"
               id="healAmount"
-              placeholder="例如: 2,000"
+              placeholder="2,000"
               value={healAmountInput}
               onChange={handleNumericInputChange(setHealAmountInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -255,9 +261,6 @@ export default function HealthCalculator() {
           <div className="space-y-3">
             {/* 精確計算結果 */}
             <div className="p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
-              <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
-                精確模擬結果
-              </h3>
               {calculateOptimalHealPercent.canSurvive && calculateOptimalHealPercent.percent > 0 && (
                 <p className="text-gray-700 dark:text-gray-300">
                   寵物自動補血建議設定:{" "}
@@ -348,7 +351,7 @@ export default function HealthCalculator() {
                 {!simulationSteps.some(step => step.action === '死亡') && (
                   <div className="mt-3 p-2 bg-green-100 rounded dark:bg-green-900/30">
                     <p className="text-xs text-green-700 dark:text-green-300">
-                      ✅ 模擬顯示此設定可以安全存活
+                      ✅ 模擬顯示在此設定下可以安全存活
                     </p>
                   </div>
                 )}
@@ -365,7 +368,7 @@ export default function HealthCalculator() {
                   血量設置百分比： {simpleCalculation}%
                   <br />
                   <span className="text-xs text-blue-600 dark:text-blue-400">
-                    (僅在 血量 & 每次補血量 ＞ 最高傷害 時可以參考)
+                    (僅在 總血量 & 每次補血量 ＞ 最高傷害 時可以參考)
                   </span>
                 </p>
               </div>

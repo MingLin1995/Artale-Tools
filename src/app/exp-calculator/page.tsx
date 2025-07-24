@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import expData from '../../exp.json';
 
 interface ExpData {
@@ -92,9 +93,14 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
-          坐牢計算機
-        </h1>
+        <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            坐牢計算機
+            </h1>
+            <Link href="/" className="text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 px-3 py-1.5">
+                返回首頁
+            </Link>
+        </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label
@@ -106,7 +112,7 @@ export default function Home() {
             <input
               type="text"
               id="targetLevel"
-              placeholder="例如: 120"
+              placeholder="120"
               value={targetLevelInput}
               onChange={handleNumericInputChange(setTargetLevelInput, validateTargetLevel)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -122,7 +128,7 @@ export default function Home() {
             <input
               type="text"
               id="expPerTenMinutes"
-              placeholder="例如: 600,000"
+              placeholder="600,000"
               value={expPerTenMinutesInput}
               onChange={handleNumericInputChange(setExpPerTenMinutesInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -138,7 +144,7 @@ export default function Home() {
             <input
               type="text"
               id="potionsPerHour"
-              placeholder="例如: 1,000"
+              placeholder="1,000"
               value={potionsPerHourInput}
               onChange={handleNumericInputChange(setPotionsPerHourInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -154,7 +160,7 @@ export default function Home() {
             <input
               type="text"
               id="potionPrice"
-              placeholder="例如: 2,185"
+              placeholder="2,185"
               value={potionPriceInput}
               onChange={handleNumericInputChange(setPotionPriceInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -170,7 +176,7 @@ export default function Home() {
             <input
               type="text"
               id="snowflakePrice"
-              placeholder="例如: 450,000"
+              placeholder="450,000"
               value={snowflakePriceInput}
               onChange={handleNumericInputChange(setSnowflakePriceInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
@@ -220,5 +226,3 @@ export default function Home() {
     </main>
   );
 }
-
-
