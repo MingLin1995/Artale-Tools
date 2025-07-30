@@ -21,6 +21,7 @@ export default function Home() {
   const [potionsPerHourInput, setPotionsPerHourInput] = useState('');
   const [potionPriceInput, setPotionPriceInput] = useState('');
   const [snowflakePriceInput, setSnowflakePriceInput] = useState('');
+  const [currentExpPercentageInput, setCurrentExpPercentageInput] = useState('');
 
   useEffect(() => {
     const fetchSnowflakePrice = async () => {
@@ -65,11 +66,18 @@ export default function Home() {
     return level;
   };
 
+  const validateExpPercentage = (percentage: number): number => {
+    if (percentage < 0) return 0;
+    if (percentage > 99) return 99;
+    return percentage;
+  };
+
   const targetLevel = useMemo(() => parseFormattedNumber(targetLevelInput), [targetLevelInput]);
   const expPerTenMinutes = useMemo(() => parseFormattedNumber(expPerTenMinutesInput), [expPerTenMinutesInput]);
   const potionsPerHour = useMemo(() => parseFormattedNumber(potionsPerHourInput), [potionsPerHourInput]);
   const potionPrice = useMemo(() => parseFormattedNumber(potionPriceInput), [potionPriceInput]);
   const snowflakePrice = useMemo(() => parseFormattedNumber(snowflakePriceInput), [snowflakePriceInput]);
+  const currentExpPercentage = useMemo(() => parseFormattedNumber(currentExpPercentageInput), [currentExpPercentageInput]);
 
 
   const requiredExp = useMemo(() => {
@@ -77,8 +85,15 @@ export default function Home() {
     const target = (expData as ExpData[]).find(
       (data) => data.level === targetLevel
     );
-    return target ? target.exp : 0;
-  }, [targetLevel]);
+    if (!target) return 0;
+
+    const totalExpForLevel = target.exp;
+    if (currentExpPercentage && currentExpPercentage > 0) {
+      return Math.ceil(totalExpForLevel - (totalExpForLevel * (currentExpPercentage / 100)));
+    }
+
+    return totalExpForLevel;
+  }, [targetLevel, currentExpPercentage]);
 
   const hoursToLevelUp = useMemo(() => {
     if (!requiredExp || !expPerTenMinutes) return 0;
@@ -135,6 +150,22 @@ export default function Home() {
               placeholder="120"
               value={targetLevelInput}
               onChange={handleNumericInputChange(setTargetLevelInput, validateTargetLevel)}
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="currentExpPercentage"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              目前經驗 (%) (0-99)
+            </label>
+            <input
+              type="text"
+              id="currentExpPercentage"
+              placeholder="0"
+              value={currentExpPercentageInput}
+              onChange={handleNumericInputChange(setCurrentExpPercentageInput, validateExpPercentage)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
