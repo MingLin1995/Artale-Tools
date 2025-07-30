@@ -278,6 +278,22 @@ export default function Home() {
             )}
           </div>
         </div>
+        <div className="pt-6 space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            各種坐牢監視器
+          </h2>
+          <div className="flex flex-col space-y-2">
+            <Link href="https://mslog.dev/" target="_blank" rel="noopener noreferrer" className="block w-full text-center text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 px-4 py-2">
+                MapleLogs 練功效率分析器
+            </Link>
+            <Link href="https://wuca.cc/gain-meter/" target="_blank" rel="noopener noreferrer" className="block w-full text-center text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 px-4 py-2">
+                WUCA - Gain Meter 刷怪效益小工具
+            </Link>
+            <Link href="https://forum.gamer.com.tw/C.php?bsn=79354&snA=5420" target="_blank" rel="noopener noreferrer" className="block w-full text-center text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 px-4 py-2">
+                伊伊經驗秒傷小幫手
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
   );
