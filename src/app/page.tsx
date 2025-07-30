@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="w-full max-w-5xl items-center justify-between font-mono text-sm flex mb-8">
+      <div className="w-full max-w-6xl items-center justify-between font-mono text-sm flex mb-8">
         <h1 className="text-4xl font-bold text-center mx-4">Artale Tools</h1>
         <div className="flex-1 text-left">
             <a href="https://github.com/MingLin1995" target="_blank" rel="noopener noreferrer" className="inline-block text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
@@ -14,7 +14,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mt-12 grid text-center lg:max-w-5xl lg:w-full lg:grid-cols-4 lg:text-left">
+      <div className="mt-12 grid text-center lg:max-w-6xl lg:w-full lg:grid-cols-4 lg:text-left">
         <Link href="/exp-calculator" className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
           <h2 className={`mb-3 text-2xl font-semibold`}>
             坐牢計算機{' '}
@@ -22,7 +22,7 @@ export default function Home() {
               -&gt;
             </span>
           </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+          <p className={`m-0 max-w-full text-sm opacity-50`}>
             計算坐牢所需的經驗值、時間和花費。
           </p>
         </Link>
@@ -34,7 +34,7 @@ export default function Home() {
               -&gt;
             </span>
           </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+          <p className={`m-0 max-w-full text-sm opacity-50`}>
             計算寵物自動補血的最佳百分比。
           </p>
         </Link>
