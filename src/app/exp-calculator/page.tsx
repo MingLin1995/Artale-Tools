@@ -9,6 +9,11 @@ interface ExpData {
   exp: number;
 }
 
+interface Snapshot {
+  item_name: string;
+  recent_avg: number;
+}
+
 const parseFormattedNumber = (str: string): number | null => {
   if (!str) return null;
   const num = parseInt(str.replace(/,/g, ''), 10);
@@ -28,7 +33,7 @@ export default function Home() {
       try {
         const response = await fetch('/api/market-price');
         const data = await response.json();
-        const snowflake = data.snapshots.find((item: any) => item.item_name === '飄雪結晶');
+        const snowflake = data.snapshots.find((item: Snapshot) => item.item_name === '飄雪結晶');
         if (snowflake && snowflake.median) {
           setSnowflakePriceInput(snowflake.median.toLocaleString('en-US'));
         } else {
