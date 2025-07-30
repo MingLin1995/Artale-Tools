@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import expData from '../../exp.json';
 
@@ -21,6 +21,26 @@ export default function Home() {
   const [potionsPerHourInput, setPotionsPerHourInput] = useState('');
   const [potionPriceInput, setPotionPriceInput] = useState('');
   const [snowflakePriceInput, setSnowflakePriceInput] = useState('');
+
+  useEffect(() => {
+    const fetchSnowflakePrice = async () => {
+      try {
+        const response = await fetch('/api/market-price');
+        const data = await response.json();
+        const snowflake = data.snapshots.find((item: any) => item.item_name === '飄雪結晶');
+        if (snowflake && snowflake.median) {
+          setSnowflakePriceInput(snowflake.median.toLocaleString('en-US'));
+        } else {
+          setSnowflakePriceInput('450,000');
+        }
+      } catch (error) {
+        console.error('Error fetching snowflake price:', error);
+        setSnowflakePriceInput('450,000');
+      }
+    };
+
+    fetchSnowflakePrice();
+  }, []);
 
   const handleNumericInputChange = (
     setter: React.Dispatch<React.SetStateAction<string>>,
@@ -171,12 +191,12 @@ export default function Home() {
               htmlFor="snowflakePrice"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              當前雪花市價
+              當前雪花市價(參考第三方交易平台 - 中位價)
             </label>
             <input
               type="text"
               id="snowflakePrice"
-              placeholder="450,000"
+              placeholder="讀取中..."
               value={snowflakePriceInput}
               onChange={handleNumericInputChange(setSnowflakePriceInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
