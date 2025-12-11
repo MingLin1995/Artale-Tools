@@ -1,17 +1,12 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import expData from '../../exp.json';
 
 interface ExpData {
   level: number;
   exp: number;
-}
-
-interface Snapshot {
-  item_name: string;
-  recent_avg: number;
 }
 
 const parseFormattedNumber = (str: string): number | null => {
@@ -27,26 +22,6 @@ export default function Home() {
   const [potionPriceInput, setPotionPriceInput] = useState('');
   const [snowflakePriceInput, setSnowflakePriceInput] = useState('');
   const [currentExpPercentageInput, setCurrentExpPercentageInput] = useState('');
-
-  useEffect(() => {
-    const fetchSnowflakePrice = async () => {
-      try {
-        const response = await fetch('/api/market-price');
-        const data = await response.json();
-        const snowflake = data.snapshots.find((item: Snapshot) => item.item_name === '飄雪結晶');
-        if (snowflake && snowflake.median) {
-          setSnowflakePriceInput(snowflake.median.toLocaleString('en-US'));
-        } else {
-          setSnowflakePriceInput('450,000');
-        }
-      } catch (error) {
-        console.error('Error fetching snowflake price:', error);
-        setSnowflakePriceInput('450,000');
-      }
-    };
-
-    fetchSnowflakePrice();
-  }, []);
 
   const handleNumericInputChange = (
     setter: React.Dispatch<React.SetStateAction<string>>,
@@ -228,11 +203,19 @@ export default function Home() {
               className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               當前雪花市價(參考第三方交易平台 - 中位價)
+              <Link
+                href="https://artale-market.org/price-trends"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 text-xs text-blue-600 underline hover:text-blue-800"
+              >
+                前往查價
+              </Link>
             </label>
             <input
               type="text"
               id="snowflakePrice"
-              placeholder="讀取中..."
+              placeholder="請先查價後填入，例如 680,000"
               value={snowflakePriceInput}
               onChange={handleNumericInputChange(setSnowflakePriceInput)}
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
