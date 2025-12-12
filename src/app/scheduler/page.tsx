@@ -107,14 +107,15 @@ export default function SchedulerPage() {
 
     const handleMouseDown = (dayIndex: number, hour: number) => {
         setIsDragging(true);
-        const startSlotKey = new Date(
-            Date.UTC(
-                weekDates[dayIndex].getUTCFullYear(),
-                weekDates[dayIndex].getUTCMonth(),
-                weekDates[dayIndex].getUTCDate(),
-                hour
-            )
-        ).toISOString();
+        const date = weekDates[dayIndex];
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth();
+        const day = date.getUTCDate();
+        const startSlotDate = new Date(
+            `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(hour).padStart(2, '0')}:00:00.000+08:00`
+        );
+        const startSlotKey = startSlotDate.toISOString();
+
         const mode = selectedSlots.has(startSlotKey) ? "deselect" : "select";
         setDragMode(mode);
         setDragStartSlot({ dayIndex, hour });
@@ -130,16 +131,14 @@ export default function SchedulerPage() {
         const maxHour = Math.max(dragStartSlot.hour, hour);
         for (let d = minDay; d <= maxDay; d++) {
             for (let h = minHour; h <= maxHour; h++) {
-                newDraggedSlots.add(
-                    new Date(
-                        Date.UTC(
-                            weekDates[d].getUTCFullYear(),
-                            weekDates[d].getUTCMonth(),
-                            weekDates[d].getUTCDate(),
-                            h
-                        )
-                    ).toISOString()
+                const date = weekDates[d];
+                const year = date.getUTCFullYear();
+                const month = date.getUTCMonth();
+                const day = date.getUTCDate();
+                const slotDate = new Date(
+                    `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(h).padStart(2, '0')}:00:00.000+08:00`
                 );
+                newDraggedSlots.add(slotDate.toISOString());
             }
         }
         setDraggedSlots(newDraggedSlots);
@@ -233,6 +232,8 @@ export default function SchedulerPage() {
     const days = ["日", "一", "二", "三", "四", "五", "六"];
     const hours = Array.from({ length: 24 }, (_, i) => i);
 
+    const cycleStartUTC = new Date(currentWeekBounds.start);
+
     return (
         <main
             className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-900"
@@ -307,30 +308,21 @@ export default function SchedulerPage() {
                             {hours.map((hour) => (
                                 <div key={hour} className="contents">
                                     <div className="col-span-1 py-1 h-8 text-center border-b border-gray-400 dark:border-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center bg-gray-50 dark:bg-gray-700">
-                                        {new Date(
-                                            Date.UTC(
-                                                weekDates[0].getUTCFullYear(),
-                                                weekDates[0].getUTCMonth(),
-                                                weekDates[0].getUTCDate(),
-                                                hour
-                                            )
-                                        ).toLocaleString("zh-TW", {
-                                            timeZone: "Asia/Taipei",
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                            hour12: false,
-                                        })}
+                                        {`${String(hour).padStart(2, "0")}:00`}
                                     </div>
                                     {weekDates.map((date, dayIndex) => {
+                                        const TPE_YEAR = date.getUTCFullYear();
+                                        const TPE_MONTH = date.getUTCMonth();
+                                        const TPE_DAY = date.getUTCDate();
+
                                         const slotDate = new Date(
-                                            Date.UTC(
-                                                date.getUTCFullYear(),
-                                                date.getUTCMonth(),
-                                                date.getUTCDate(),
-                                                hour
-                                            )
+                                            `${TPE_YEAR}-${String(TPE_MONTH + 1).padStart(2, '0')}-${String(TPE_DAY).padStart(2, '0')}T${String(hour).padStart(2, '0')}:00:00.000+08:00`
                                         );
+
                                         const isPast = slotDate < now;
+                                        const isOutsideCycle = slotDate < cycleStartUTC;
+                                        const isDisabled = isPast || isOutsideCycle;
+                                        
                                         const slotKey = slotDate.toISOString();
                                         const isSelected = selectedSlots.has(slotKey);
                                         const isBeingDragged = draggedSlots.has(slotKey);
@@ -344,27 +336,27 @@ export default function SchedulerPage() {
                                             else if (dragMode === "deselect")
                                                 cellClass = "bg-red-300 dark:bg-red-600";
                                         }
-                                        if (isPast) {
+                                        if (isDisabled) {
                                             cellClass = "bg-gray-200 cursor-not-allowed dark:bg-gray-700";
                                         }
 
                                         return (
                                             <div
                                                 key={`${dayIndex}-${hour}`}
-                                                className={`col-span-1 h-8 text-center border-b transition-colors duration-100 flex items-center justify-center text-gray-800 dark:text-white font-semibold ${cellClass} ${isPast ? "" : "cursor-pointer"
+                                                className={`col-span-1 h-8 text-center border-b transition-colors duration-100 flex items-center justify-center text-gray-800 dark:text-white font-semibold ${cellClass} ${isDisabled ? "" : "cursor-pointer"
                                                     }`}
                                                 onMouseDown={
-                                                    !isPast
+                                                    !isDisabled
                                                         ? () => handleMouseDown(dayIndex, hour)
                                                         : undefined
                                                 }
                                                 onMouseEnter={
-                                                    !isPast
+                                                    !isDisabled
                                                         ? () => handleMouseEnter(dayIndex, hour)
                                                         : undefined
                                                 }
                                             >
-                                                {heatmapCount > 0 && !isSelected && !isPast
+                                                {heatmapCount > 0 && !isSelected && !isDisabled
                                                     ? heatmapCount
                                                     : ""}
                                             </div>
