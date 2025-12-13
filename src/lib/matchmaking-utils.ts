@@ -100,6 +100,6 @@ export function validateTeamComposition(team: User[]): boolean {
 }
 
 export function validatePartialTeam(team: User[]): boolean {
-    if (team.length < 3 || team.length > 5) return false;
+    if (team.length < 2 || team.length > 5) return false;
     return true; 
 }

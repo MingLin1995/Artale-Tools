@@ -50,53 +50,45 @@ export async function GET(request: Request) {
             }
         });
 
+        let maxTeamSizeFound = 0;
         const matchesByTimeSlot = new Map<string, User[][]>();
 
-        for (const [slotKey, availablePlayers] of availableUsersBySlot.entries()) {
-            let teamsForThisSlot: User[][] = [];
-
-            // 第一層: 嘗試尋找6人隊伍
-            if (availablePlayers.length >= 6) {
-                const combinationsOf6 = getCombinations(availablePlayers, 6);
-                for (const team of combinationsOf6) {
-                    if (validateTeamComposition(team)) {
-                        teamsForThisSlot.push(team);
+        // 找出所有可能組合中的最大隊伍人數
+        for (const [, availablePlayers] of availableUsersBySlot.entries()) {
+            for (let teamSize = 6; teamSize > maxTeamSizeFound; teamSize--) {
+                if (availablePlayers.length >= teamSize) {
+                    const combinations = getCombinations(availablePlayers, teamSize);
+                    const validator = teamSize === 6 ? validateTeamComposition : validatePartialTeam;
+                    if (combinations.some(team => validator(team))) {
+                        maxTeamSizeFound = teamSize;
+                        break;
                     }
                 }
             }
+            
+            if (maxTeamSizeFound === 6) {
+                break;
+            }
+        }
 
-            // 第二層: 如果沒有6人隊伍，則嘗試尋找5人隊伍
-            if (teamsForThisSlot.length === 0 && availablePlayers.length >= 5) {
-                const combinationsOf5 = getCombinations(availablePlayers, 5);
-                for (const team of combinationsOf5) {
-                    if (validatePartialTeam(team)) {
-                        teamsForThisSlot.push(team);
+        // 如果有找到任何隊伍，則只收集符合最大隊伍人數的組合
+        if (maxTeamSizeFound > 0) {
+            for (const [slotKey, availablePlayers] of availableUsersBySlot.entries()) {
+                if (availablePlayers.length >= maxTeamSizeFound) {
+                    const teamsForThisSlot: User[][] = [];
+                    const combinations = getCombinations(availablePlayers, maxTeamSizeFound);
+                    const validator = maxTeamSizeFound === 6 ? validateTeamComposition : validatePartialTeam;
+                    
+                    for (const team of combinations) {
+                        if (validator(team)) {
+                            teamsForThisSlot.push(team);
+                        }
+                    }
+
+                    if (teamsForThisSlot.length > 0) {
+                        matchesByTimeSlot.set(slotKey, teamsForThisSlot);
                     }
                 }
-            }
-
-            // 第三層: 如果仍沒有隊伍，則嘗試尋找4人隊伍
-            if (teamsForThisSlot.length === 0 && availablePlayers.length >= 4) {
-                const combinationsOf4 = getCombinations(availablePlayers, 4);
-                for (const team of combinationsOf4) {
-                    if (validatePartialTeam(team)) {
-                        teamsForThisSlot.push(team);
-                    }
-                }
-            }
-
-            // 第四層: 如果仍沒有隊伍，則嘗試尋找3人隊伍
-            if (teamsForThisSlot.length === 0 && availablePlayers.length >= 3) {
-                const combinationsOf3 = getCombinations(availablePlayers, 3);
-                for (const team of combinationsOf3) {
-                    if (validatePartialTeam(team)) {
-                        teamsForThisSlot.push(team);
-                    }
-                }
-            }
-
-            if (teamsForThisSlot.length > 0) {
-                matchesByTimeSlot.set(slotKey, teamsForThisSlot);
             }
         }
         
