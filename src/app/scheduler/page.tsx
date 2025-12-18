@@ -41,7 +41,7 @@ export default function SchedulerPage() {
     );
     const weekDates = useMemo(() => {
         const dates = [];
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 8; i++) {
             const day = new Date(currentWeekBounds.start);
             day.setUTCDate(day.getUTCDate() + i);
             dates.push(day);
@@ -233,6 +233,7 @@ export default function SchedulerPage() {
     const hours = Array.from({ length: 24 }, (_, i) => i);
 
     const cycleStartUTC = new Date(currentWeekBounds.start);
+    const cycleEndUTC = new Date(currentWeekBounds.end);
 
     return (
         <main
@@ -240,7 +241,7 @@ export default function SchedulerPage() {
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
         >
-            <div className="w-full sm:max-w-xl md:max-w-3xl lg:max-w-4xl p-4 md:p-8 space-y-6 bg-gray-50 rounded-lg shadow-md dark:bg-gray-700">
+            <div className="w-full sm:max-w-xl md:max-w-3xl lg:max-w-5xl p-4 md:p-8 space-y-6 bg-gray-50 rounded-lg shadow-md dark:bg-gray-700">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                         拖曳選取有空的時間
@@ -291,7 +292,7 @@ export default function SchedulerPage() {
                     <p className="text-center text-gray-700 dark:text-gray-300">載入可用時間中...</p>
                 ) : (
                     <div className="overflow-x-auto bg-gray-10 rounded-lg shadow-md p-4 select-none">
-                        <div className="grid grid-cols-8 gap-1 text-xs sm:text-sm">
+                        <div className="grid grid-cols-9 gap-1 text-xs sm:text-sm">
                             <div className="col-span-1 border-b border-gray-400 dark:border-gray-600 text-center font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 flex items-center justify-center py-2">
                                 時間
                             </div>
@@ -320,7 +321,7 @@ export default function SchedulerPage() {
                                         );
 
                                         const isPast = slotDate < now;
-                                        const isOutsideCycle = slotDate < cycleStartUTC;
+                                        const isOutsideCycle = slotDate < cycleStartUTC || slotDate >= cycleEndUTC;
                                         const isDisabled = isPast || isOutsideCycle;
                                         
                                         const slotKey = slotDate.toISOString();
