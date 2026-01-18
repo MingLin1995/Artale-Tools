@@ -109,12 +109,12 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             坐牢計算機
-            </h1>
-            <Link href="/" className="text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 px-3 py-1.5">
-                返回首頁
-            </Link>
+          </h1>
+          <Link href="/" className="text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 px-3 py-1.5">
+            返回首頁
+          </Link>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
@@ -204,7 +204,7 @@ export default function Home() {
             >
               當前雪花市價(參考第三方交易平台 - 中位價)
               <Link
-                href="https://artale-market.org/price-trends"
+                href="https://artale-market.org/transaction?itemName=%E9%A3%84%E9%9B%AA%E7%B5%90%E6%99%B6&transactionType=sell&isActive=true&showDiscordUsername=true&timeRange=12"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ml-2 text-xs text-blue-600 underline hover:text-blue-800"
@@ -267,13 +267,13 @@ export default function Home() {
           </h2>
           <div className="flex flex-col space-y-2">
             <Link href="https://mslog.dev/" target="_blank" rel="noopener noreferrer" className="block w-full text-center text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 px-4 py-2">
-                MapleLogs 練功效率分析器
+              MapleLogs 練功效率分析器
             </Link>
             <Link href="https://wuca.cc/gain-meter/" target="_blank" rel="noopener noreferrer" className="block w-full text-center text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 px-4 py-2">
-                WUCA - Gain Meter 刷怪效益小工具
+              WUCA - Gain Meter 刷怪效益小工具
             </Link>
             <Link href="https://forum.gamer.com.tw/C.php?bsn=79354&snA=5420" target="_blank" rel="noopener noreferrer" className="block w-full text-center text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 px-4 py-2">
-                伊伊經驗秒傷小幫手
+              伊伊經驗秒傷小幫手
             </Link>
           </div>
         </div>
